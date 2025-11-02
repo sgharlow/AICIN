@@ -1,0 +1,22 @@
+{
+  "name": "@aicin/utils",
+  "version": "1.0.0",
+  "description": "Shared utility functions for AICIN agents",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@aicin/types": "*",
+    "jsonwebtoken": "^9.0.2",
+    "ioredis": "^5.3.2",
+    "@google-cloud/vertexai": "^1.1.0",
+    "@google-cloud/secret-manager": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
+    "typescript": "^5.3.3"
+  }
+}

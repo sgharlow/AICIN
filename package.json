@@ -1,0 +1,39 @@
+{
+  "name": "aicin",
+  "version": "1.0.0",
+  "description": "AI Course Intelligence Network - Multi-Agent System on Google Cloud Run",
+  "private": true,
+  "workspaces": [
+    "agents/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "eslint . --ext .ts",
+    "deploy": "bash scripts/deploy-all.sh"
+  },
+  "keywords": [
+    "google-cloud-run",
+    "multi-agent",
+    "ai",
+    "machine-learning",
+    "course-recommendation"
+  ],
+  "author": "LearningAI365",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
