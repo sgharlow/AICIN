@@ -152,13 +152,14 @@ function convertToUserProfile(answers: QuizAnswers): UserProfile {
     maxBudget,
     weeklyHours,
     timeline,
-    preferredFormat: answers.learningStyle,
     wantsCertification: answers.certification === 'required'
+    // Removed: preferredFormat (learningStyle field no longer in quiz)
   };
 }
 
 /**
  * Calculate category scores (backward compatibility with Lambda)
+ * Updated for Phase 2: Removed unused fields (background, specialization, priorProjects)
  */
 function calculateCategoryScores(answers: QuizAnswers): Record<string, number> {
   return {
@@ -166,15 +167,16 @@ function calculateCategoryScores(answers: QuizAnswers): Record<string, number> {
     goals: scoreGoals(answers.learningGoal),
     timeline: scoreTimeline(answers.timeline),
     budget: scoreBudget(answers.budget),
-    background: scoreBackground(answers.background),
     interests: scoreInterests(answers.interests),
     programming: scoreProgramming(answers.programming),
-    specialization: scoreSpecialization(answers.specialization),
-    learningStyle: scoreLearningStyle(answers.learningStyle),
     certification: scoreCertification(answers.certification),
     availability: scoreAvailability(answers.availability),
-    priorProjects: scorePriorProjects(answers.priorProjects),
     mathBackground: scoreMathBackground(answers.mathBackground),
+    // Removed in Phase 2 (unused in recommendations):
+    // - background (only for analytics)
+    // - specialization (only for analytics)
+    // - priorProjects (redundant with experienceLevel)
+    // - learningStyle (not used in scoring)
   };
 }
 
@@ -222,16 +224,6 @@ function scoreBudget(budget: string): number {
   return map[budget] || 0.5;
 }
 
-function scoreBackground(background: string): number {
-  const map: Record<string, number> = {
-    tech: 1.0,
-    'non-tech': 0.6,
-    student: 0.7,
-    other: 0.5
-  };
-  return map[background] || 0.6;
-}
-
 function scoreInterests(interests: string[]): number {
   // More interests = higher engagement score
   return Math.min(interests.length / 3, 1.0);
@@ -245,14 +237,6 @@ function scoreProgramming(programming: string): number {
     advanced: 1.0
   };
   return map[programming] || 0.5;
-}
-
-function scoreSpecialization(spec: string): number {
-  return spec === 'specialist' ? 0.8 : 0.6;
-}
-
-function scoreLearningStyle(style: string): number {
-  return style === 'mixed' ? 1.0 : 0.7;
 }
 
 function scoreCertification(cert: string): number {
@@ -274,15 +258,11 @@ function scoreAvailability(avail: string): number {
   return map[avail] || 0.5;
 }
 
-function scorePriorProjects(projects: string): number {
-  const map: Record<string, number> = {
-    '0': 0.2,
-    '1-2': 0.5,
-    '3-5': 0.8,
-    '5+': 1.0
-  };
-  return map[projects] || 0.4;
-}
+// Removed scoring functions for fields no longer in QuizAnswers:
+// - scoreBackground (background field removed)
+// - scoreSpecialization (specialization field removed)
+// - scoreLearningStyle (learningStyle field removed)
+// - scorePriorProjects (priorProjects field removed)
 
 function scoreMathBackground(math: string): number {
   const map: Record<string, number> = {

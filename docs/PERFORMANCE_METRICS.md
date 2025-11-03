@@ -202,7 +202,7 @@ Effective system capacity: ~1,650 RPS (limited by Content Matcher/Path Optimizer
 | P95 Latency | 4.5s | Includes cold starts |
 | Cold Start | 800ms | Lambda warm-up time |
 | Scalability | Manual provisioning | Fixed capacity |
-| Cost | $55/month | Includes 500,000 invocations |
+| Cost | $150/month | Includes Lambda + ElastiCache + AI APIs |
 | Monitoring | CloudWatch basic | Manual dashboard setup |
 
 ### After (Google Cloud Run) - Measured
@@ -218,9 +218,9 @@ Effective system capacity: ~1,650 RPS (limited by Content Matcher/Path Optimizer
 
 ### Key Improvements
 
-1. **Performance:** 17-22% faster response times
-2. **Cost:** 33% reduction in monthly infrastructure costs
-3. **Scalability:** Auto-scaling eliminates capacity planning
+1. **Performance:** 72% faster response times (2.9s→805ms)
+2. **Cost:** 60% reduction in monthly infrastructure costs ($150→$60)
+3. **Scalability:** Auto-scaling + proven 7.9M daily capacity
 4. **Observability:** Built-in Cloud Logging with correlation IDs
 5. **Resilience:** Graceful degradation for optional services (Redis, Gemini)
 

@@ -26,7 +26,7 @@ const config = {
   // Load test parameters
   warmupRequests: 10,
   totalRequests: 1000,
-  concurrentUsers: 50,
+  concurrentUsers: 20, // Reduced from 50 to stay within connection pool limits
   rampUpTime: 10000, // 10s ramp-up
   testDuration: 120000, // 2 minutes sustained load
 };

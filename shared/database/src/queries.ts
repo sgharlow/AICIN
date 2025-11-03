@@ -245,8 +245,9 @@ export async function updateUserProfile(
     experienceLevel: string;
     availabilityHours: number;
     budgetRange: any;
-    learningStyle: string;
-    industry: string;
+    // Removed in Phase 2 (fields no longer in quiz):
+    // learningStyle: string;
+    // industry: string;
   }
 ): Promise<void> {
   await query(`
@@ -258,18 +259,15 @@ export async function updateUserProfile(
       experience_level = $3,
       availability_hours = $4,
       budget_range = $5::jsonb,
-      preferred_learning_style = $6,
-      industry = $7,
       updated_at = $1
-    WHERE id = $8
+    WHERE id = $6
   `, [
     new Date(),
     profileData.learningGoals,
     profileData.experienceLevel,
     profileData.availabilityHours,
     JSON.stringify(profileData.budgetRange),
-    profileData.learningStyle,
-    profileData.industry,
+    // Removed: learningStyle and industry (fields no longer in quiz)
     userId
   ]);
 }

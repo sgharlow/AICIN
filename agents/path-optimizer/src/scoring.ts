@@ -1,8 +1,10 @@
 /**
- * 3-Layer Scoring System
- * Layer 1: Content (TF-IDF) - 40% weight
- * Layer 2: Metadata (difficulty, budget, timeline) - 35% weight
- * Layer 3: Course Quality - 25% weight
+ * 2-Layer Scoring System (Optimized for 251 Learning Paths)
+ * Layer 1: Metadata (difficulty, budget, timeline) - 70% weight (PRIMARY DIFFERENTIATOR)
+ * Layer 2: Content (TF-IDF) - 30% weight (SEMANTIC MATCHING)
+ *
+ * Note: Metadata provides better differentiation than TF-IDF with small corpus.
+ * Content matching supplements with semantic similarity.
  */
 
 import type {
@@ -18,33 +20,29 @@ import type {
 
 /**
  * Calculate adaptive layer weights based on data completeness
+ * 2-Layer System: Metadata (70%) + Content (30%)
+ *
+ * REVERSED WEIGHTS: Metadata is now primary because:
+ * - TF-IDF doesn't differentiate well with 251 paths
+ * - Metadata (experience, budget, timeline) provides clear differentiation
+ * - Content matching supplements with semantic similarity
+ *
+ * UPDATED: Fixed 70/30 weights regardless of completeness_score
+ * - Database has completeness_score = 0 for ALL paths (not populated)
+ * - But metadata (difficulty, cost, duration) IS populated
+ * - So we use metadata-first scoring always
  */
 export function calculateAdaptiveWeights(path: LearningPath): LayerWeights {
-  const completenessScore = path.completeness_score || 50;
-
-  // If data is sparse (< 50% complete), rely more on content matching
-  if (completenessScore < 50) {
-    return {
-      content: 0.50,  // Increase content weight
-      metadata: 0.25, // Decrease metadata weight
-      courses: 0.25
-    };
-  }
-
-  // If data is rich (>= 80% complete), use balanced weights
-  if (completenessScore >= 80) {
-    return {
-      content: 0.35,  // Decrease content weight
-      metadata: 0.40, // Increase metadata weight
-      courses: 0.25
-    };
-  }
-
-  // Default balanced weights (50-80% complete)
+  // Database diagnostics show:
+  // - completeness_score = 0 for ALL 251 paths (field not populated)
+  // - BUT metadata (difficulty, total_cost, total_realistic_hours) IS populated
+  // - Therefore: Use fixed metadata-first weights (70/30)
+  //
+  // This ensures beginners don't get advanced paths due to high content scores
   return {
-    content: 0.40,
-    metadata: 0.35,
-    courses: 0.25
+    content: 0.30,  // Content supplements with semantic matching
+    metadata: 0.70, // Metadata is primary (experience level, budget, timeline)
+    courses: 0.00   // Not used (kept for type compatibility)
   };
 }
 
@@ -70,42 +68,52 @@ export function getContentScore(pathId: string, contentScores: Map<string, numbe
 /**
  * Layer 2: Metadata score
  * Considers difficulty, budget, timeline, certification
+ *
+ * UPDATED: Increased experience level weight from 0.3 to 0.5
+ * - Experience level is now the DOMINANT factor (50% of metadata)
+ * - Budget reduced from 0.25 to 0.2 (20%)
+ * - Timeline reduced from 0.25 to 0.2 (20%)
+ * - Certification reduced from 0.2 to 0.1 (10%)
+ *
+ * This ensures beginners don't get advanced paths even if budget/timeline match
  */
 export function calculateMetadataScore(path: LearningPath, userProfile: UserProfile): number {
   let score = 0;
   let maxScore = 0;
 
-  // Experience level matching (0.3 weight)
+  // Experience level matching (0.5 weight) - DOMINANT FACTOR
+  // With stricter level matching (0.05 for 2+ level mismatch), this prevents
+  // beginners from getting advanced paths even if other metadata matches
   if (path.level) {
-    maxScore += 0.3;
+    maxScore += 0.5;
     const levelScore = matchExperienceLevel(userProfile.experienceLevel, path.level);
-    score += levelScore * 0.3;
+    score += levelScore * 0.5;
   }
 
-  // Budget matching (0.25 weight)
+  // Budget matching (0.2 weight)
   if (path.total_cost !== null && path.total_cost !== undefined) {
-    maxScore += 0.25;
+    maxScore += 0.2;
     const budgetScore = path.total_cost <= userProfile.maxBudget ? 1.0 :
       Math.max(0, 1 - (path.total_cost - userProfile.maxBudget) / userProfile.maxBudget);
-    score += budgetScore * 0.25;
+    score += budgetScore * 0.2;
   }
 
-  // Timeline matching (0.25 weight)
+  // Timeline matching (0.2 weight)
   if (path.estimated_hours) {
-    maxScore += 0.25;
+    maxScore += 0.2;
     const weeksNeeded = path.estimated_hours / userProfile.weeklyHours;
     const timelineScore = weeksNeeded <= userProfile.timeline ? 1.0 :
       Math.max(0, 1 - (weeksNeeded - userProfile.timeline) / userProfile.timeline);
-    score += timelineScore * 0.25;
+    score += timelineScore * 0.2;
   }
 
-  // Certification matching (0.2 weight)
+  // Certification matching (0.1 weight)
   if (path.has_certificate !== null && path.has_certificate !== undefined) {
-    maxScore += 0.2;
+    maxScore += 0.1;
     const wantsCert = userProfile.wantsCertification;
     const hasCert = path.has_certificate;
     const certScore = (wantsCert && hasCert) ? 1.0 : (wantsCert && !hasCert) ? 0.3 : 0.7;
-    score += certScore * 0.2;
+    score += certScore * 0.1;
   }
 
   // Normalize by available metadata
@@ -155,13 +163,13 @@ export function scorePath(
   layerBreakdown: LayerScores;
   weights: LayerWeights;
 } {
-  // Calculate adaptive weights
+  // Calculate adaptive weights (2-layer system)
   const weights = calculateAdaptiveWeights(path);
 
-  // Calculate layer scores
+  // Calculate layer scores (2-layer: content + metadata only)
   const contentScore = getContentScore(path.document_id, contentScores);
   const metadataScore = calculateMetadataScore(path, userProfile);
-  const courseScore = calculateCourseScore(courses);
+  const courseScore = 0; // Not used in 2-layer system (all paths are pre-validated for quality)
 
   // Compute weighted final score
   const totalWeight = weights.content + weights.metadata + weights.courses;
@@ -297,30 +305,88 @@ export function generateMatchReasons(
 
 /**
  * Determine confidence level
+ * Score-based only (ignoring completeness)
+ *
+ * With metadata-focused scoring (70% metadata, 30% content), scores should
+ * be well-distributed based on user requirements match.
  */
 function determineConfidence(
   score: number,
   completenessScore: number
 ): 'low' | 'medium' | 'high' {
-  if (score >= 0.8 && completenessScore >= 80) {
+  // High confidence: strong match on both metadata and content
+  // Top-tier recommendations that meet user requirements well
+  if (score >= 0.6) {
     return 'high';
   }
-  if (score >= 0.6 && completenessScore >= 50) {
+
+  // Medium confidence: good match, reasonable fit
+  // Solid recommendations that address most user needs
+  if (score >= 0.35) {
     return 'medium';
   }
+
+  // Low confidence: weak match or poor fit
+  // Fallback recommendations or misaligned requirements
   return 'low';
 }
 
 /**
  * Match experience level
+ *
+ * UPDATED: Stricter level matching to prevent beginners getting advanced paths
+ * - Perfect match (0 levels apart): 1.0
+ * - 1 level apart: 0.4 (acceptable stretch, e.g., beginner → intermediate)
+ * - 2+ levels apart: 0.05 (strong penalty, e.g., beginner → advanced)
+ *
+ * FIXED: Handle case-insensitive matching and special values
+ * - Database has "Beginner", "Intermediate", "Advanced", "Complete Journey"
+ * - Code expects lowercase: "beginner", "intermediate", "advanced"
+ * - "Complete Journey" treated as intermediate level
  */
 function matchExperienceLevel(
   userLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert',
-  pathLevel: 'beginner' | 'intermediate' | 'advanced'
+  pathLevel: 'beginner' | 'intermediate' | 'advanced' | string
 ): number {
   const levelOrder = ['beginner', 'intermediate', 'advanced', 'expert'];
-  const userIndex = levelOrder.indexOf(userLevel);
-  const pathIndex = levelOrder.indexOf(pathLevel);
+
+  // Normalize user level to lowercase
+  const normalizedUserLevel = userLevel.toLowerCase();
+  const userIndex = levelOrder.indexOf(normalizedUserLevel);
+
+  // Normalize path level to lowercase and handle special cases
+  let normalizedPathLevel = pathLevel.toLowerCase().trim();
+
+  // Map special values
+  if (normalizedPathLevel.includes('complete') || normalizedPathLevel.includes('journey')) {
+    // "Complete Journey" paths are comprehensive, treat as intermediate
+    normalizedPathLevel = 'intermediate';
+  }
+
+  const pathIndex = levelOrder.indexOf(normalizedPathLevel);
+
+  // Handle unknown levels - default to intermediate (neutral penalty)
+  if (userIndex === -1) {
+    console.warn(`[matchExperienceLevel] Unknown user level: "${userLevel}"`);
+    return 0.5;
+  }
+  if (pathIndex === -1) {
+    console.warn(`[matchExperienceLevel] Unknown path level: "${pathLevel}" (normalized: "${normalizedPathLevel}")`);
+    // Unknown path level: assume intermediate, calculate penalty
+    const intermediateIndex = 1; // 'intermediate'
+    const difference = Math.abs(userIndex - intermediateIndex);
+    if (difference === 0) return 1.0;
+    if (difference === 1) return 0.4;
+    return 0.05;
+  }
+
   const difference = Math.abs(userIndex - pathIndex);
-  return Math.max(0, 1 - difference * 0.3);
+
+  // Stricter penalty:
+  // - 0 levels apart: 1.0 (perfect match)
+  // - 1 level apart: 0.4 (acceptable, one step up or down)
+  // - 2+ levels apart: 0.05 (nearly incompatible)
+  if (difference === 0) return 1.0;
+  if (difference === 1) return 0.4;
+  return 0.05; // Strong penalty for 2+ level mismatch
 }

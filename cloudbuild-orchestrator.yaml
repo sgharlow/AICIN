@@ -1,0 +1,51 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/aicin-477004/orchestrator:$BUILD_ID'
+      - '-t'
+      - 'gcr.io/aicin-477004/orchestrator:latest'
+      - '-f'
+      - 'agents/orchestrator/Dockerfile'
+      - '.'
+
+  # Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/aicin-477004/orchestrator:$BUILD_ID'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'orchestrator'
+      - '--image'
+      - 'gcr.io/aicin-477004/orchestrator:$BUILD_ID'
+      - '--region'
+      - 'us-west1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'DATABASE_HOST=learningai365-postgres.cqdxs05ukdwt.us-west-2.rds.amazonaws.com,DATABASE_PORT=5432,DATABASE_NAME=learningai365,DATABASE_USERNAME=learningai_admin,DATABASE_SSL=true,DATABASE_MAX_CONNECTIONS=5,PROFILE_ANALYZER_URL=https://profile-analyzer-239116109469.us-west1.run.app,CONTENT_MATCHER_URL=https://content-matcher-239116109469.us-west1.run.app,PATH_OPTIMIZER_URL=https://path-optimizer-239116109469.us-west1.run.app,COURSE_VALIDATOR_URL=https://course-validator-239116109469.us-west1.run.app,RECOMMENDATION_BUILDER_URL=https://recommendation-builder-239116109469.us-west1.run.app'
+      - '--set-secrets'
+      - 'DATABASE_PASSWORD=DATABASE_PASSWORD:latest,JWT_SECRET=jwt-secret:latest'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '1'
+      - '--timeout'
+      - '90s'
+
+images:
+  - 'gcr.io/aicin-477004/orchestrator:$BUILD_ID'
+  - 'gcr.io/aicin-477004/orchestrator:latest'

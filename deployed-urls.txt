@@ -1,0 +1,9 @@
+# AICIN Deployed Service URLs
+# Generated: Sun, Nov  2, 2025  4:53:50 PM
+
+ORCHESTRATOR_URL=https://orchestrator-n6oitfxdra-uw.a.run.app
+PROFILE_ANALYZER_URL=https://profile-analyzer-n6oitfxdra-uw.a.run.app
+CONTENT_MATCHER_URL=https://content-matcher-n6oitfxdra-uw.a.run.app
+PATH_OPTIMIZER_URL=https://path-optimizer-n6oitfxdra-uw.a.run.app
+COURSE_VALIDATOR_URL=https://course-validator-n6oitfxdra-uw.a.run.app
+RECOMMENDATION_BUILDER_URL=https://recommendation-builder-n6oitfxdra-uw.a.run.app

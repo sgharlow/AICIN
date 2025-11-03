@@ -1,0 +1,51 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/aicin-477004/content-matcher:$BUILD_ID'
+      - '-t'
+      - 'gcr.io/aicin-477004/content-matcher:latest'
+      - '-f'
+      - 'agents/content-matcher/Dockerfile'
+      - '.'
+
+  # Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/aicin-477004/content-matcher:$BUILD_ID'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'content-matcher'
+      - '--image'
+      - 'gcr.io/aicin-477004/content-matcher:$BUILD_ID'
+      - '--region'
+      - 'us-west1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'DATABASE_HOST=learningai365-postgres.cqdxs05ukdwt.us-west-2.rds.amazonaws.com,DATABASE_PORT=5432,DATABASE_NAME=learningai365,DATABASE_USERNAME=learningai_admin,DATABASE_SSL=true,DATABASE_MAX_CONNECTIONS=5,TFIDF_DEBUG=true'
+      - '--set-secrets'
+      - 'DATABASE_PASSWORD=DATABASE_PASSWORD:latest'
+      - '--memory'
+      - '512Mi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '1'
+      - '--timeout'
+      - '60s'
+
+images:
+  - 'gcr.io/aicin-477004/content-matcher:$BUILD_ID'
+  - 'gcr.io/aicin-477004/content-matcher:latest'

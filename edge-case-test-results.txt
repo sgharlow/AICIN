@@ -1,0 +1,81 @@
+🧪 Edge Case Test Suite
+Testing 10 unusual scenarios that could break the system
+
+[1/10] Beginner Wanting Only Advanced Topics... ✗ HTTP 400
+[2/10] Advanced User with $0 Budget... ✗ HTTP 400
+[3/10] Unrealistic Timeline vs Commitment... ✗ HTTP 400
+[4/10] Advanced User, Only Python Interest... ✗ HTTP 400
+[5/10] Beginner with Unlimited Resources... ✗ HTTP 400
+[6/10] Very Broad Interests (6 topics)... ✗ HTTP 400
+[7/10] Minimal Time (2 hours/week)... ✗ HTTP 400
+[8/10] Single Interest Focus (NLP only)... ✗ HTTP 400
+[9/10] Self-Rated Intermediate, Beginner Indicators... ✗ HTTP 400
+[10/10] Cybersecurity + AI (Niche Combo)... ✗ HTTP 400
+
+================================================================================
+EDGE CASE TEST RESULTS
+================================================================================
+
+Pass Rate: 0/10 (0%)
+Fail Rate: 10/10 (100%)
+
+Grade Distribution:
+
+================================================================================
+DETAILED RESULTS
+================================================================================
+
+[1] Beginner Wanting Only Advanced Topics
+Expected: Should recommend beginner paths despite advanced interests
+Risk: System might prioritize interests over experience level
+❌ ERROR: HTTP 400
+
+[2] Advanced User with $0 Budget
+Expected: Should filter to free advanced paths or flag budget constraint
+Risk: Might recommend expensive paths ignoring budget
+❌ ERROR: HTTP 400
+
+[3] Unrealistic Timeline vs Commitment
+Expected: Should recommend paths but flag impossible timeline
+Risk: Might recommend comprehensive paths that can't be completed
+❌ ERROR: HTTP 400
+
+[4] Advanced User, Only Python Interest
+Expected: Should recommend advanced Python or suggest broader topics
+Risk: Level vs interest mismatch handling
+❌ ERROR: HTTP 400
+
+[5] Beginner with Unlimited Resources
+Expected: Should still recommend beginner paths (not influenced by money)
+Risk: Might assume high budget = advanced user
+❌ ERROR: HTTP 400
+
+[6] Very Broad Interests (6 topics)
+Expected: Should recommend comprehensive/journey paths
+Risk: Might struggle to prioritize, give generic results
+❌ ERROR: HTTP 400
+
+[7] Minimal Time (2 hours/week)
+Expected: Should recommend shorter paths or micro-learning
+Risk: Might recommend paths requiring 10-20 hrs/week
+❌ ERROR: HTTP 400
+
+[8] Single Interest Focus (NLP only)
+Expected: Should recommend NLP-specific paths
+Risk: Limited paths available, might give generic ML
+❌ ERROR: HTTP 400
+
+[9] Self-Rated Intermediate, Beginner Indicators
+Expected: Should respect stated experience level
+Risk: Might override user's self-assessment
+❌ ERROR: HTTP 400
+
+[10] Cybersecurity + AI (Niche Combo)
+Expected: Should find relevant paths or acknowledge limited options
+Risk: No cybersecurity AI paths available → poor recommendations
+❌ ERROR: HTTP 400
+
+================================================================================
+VERDICT: ❌ NEEDS WORK
+  0/10 edge cases handled gracefully
+================================================================================

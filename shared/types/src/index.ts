@@ -27,21 +27,28 @@ export interface MessageMetadata {
 // ============================================================================
 
 export interface QuizAnswers {
+  // Critical fields (required)
   experienceLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  learningGoal: 'career-switch' | 'upskill' | 'exploration' | 'certification';
+  interests: string[];
+
+  // High-impact fields (optional, affect recommendations significantly)
   availability: '0-5h' | '5-10h' | '10-20h' | '20+h';
   budget: '$0' | '$0-100' | '$100-500' | '$500+';
-  background: 'tech' | 'non-tech' | 'student' | 'other';
-  interests: string[];
-  programming: 'none' | 'basic' | 'intermediate' | 'advanced';
-  specialization: 'generalist' | 'specialist';
-  learningStyle: 'video' | 'reading' | 'hands-on' | 'mixed';
-  certification: 'not-important' | 'nice-to-have' | 'required';
   timeline: 'flexible' | '3-6-months' | '1-3-months' | 'asap';
-  priorProjects: '0' | '1-2' | '3-5' | '5+';
+  certification: 'not-important' | 'nice-to-have' | 'required';
+
+  // Medium-impact fields (optional, for explainability and future use)
+  learningGoal: 'career-switch' | 'upskill' | 'exploration' | 'certification';
+  programming: 'none' | 'basic' | 'intermediate' | 'advanced';
   mathBackground: 'minimal' | 'basic' | 'strong' | 'advanced';
-  industry: string;
-  teamPreference: 'individual' | 'team' | 'both';
+
+  // REMOVED in Phase 2 (unused in recommendations):
+  // - background: 'tech' | 'non-tech' | 'student' | 'other' (only in categoryScores)
+  // - specialization: 'generalist' | 'specialist' (only in categoryScores)
+  // - priorProjects: '0' | '1-2' | '3-5' | '5+' (redundant with experienceLevel)
+  // - industry: string (not used at all)
+  // - teamPreference: 'individual' | 'team' | 'both' (not used at all)
+  // - learningStyle: 'video' | 'reading' | 'hands-on' | 'mixed' (not used in scoring)
 }
 
 export interface UserProfile {
@@ -58,13 +65,15 @@ export interface UserProfile {
   timeline: number; // weeks
 
   // Preferences
-  preferredFormat?: 'video' | 'reading' | 'hands-on' | 'mixed';
   wantsCertification?: boolean;
 
   // Derived features (calculated by ProfileAnalyzer)
   interestVector?: number[];
   skillGapScore?: number;
   urgencyFactor?: number;
+
+  // REMOVED in Phase 2:
+  // - preferredFormat (learningStyle field removed from quiz, not used in scoring)
 }
 
 // ============================================================================
@@ -230,6 +239,7 @@ export interface QuizSubmissionResponse {
   categoryScores: Record<string, number>;
   processingTimeMs: number;
   correlationId: string;
+  warnings?: string[]; // Optional warnings for defaulted/missing fields
 }
 
 export interface RecommendationResponse {

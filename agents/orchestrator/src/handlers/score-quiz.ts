@@ -64,18 +64,69 @@ export async function scoreQuizHandler(req: Request, res: Response): Promise<voi
     // Validate request body
     const { answers } = req.body as { answers: QuizAnswers };
 
-    if (!answers || Object.keys(answers).length < 15) {
+    if (!answers) {
       res.status(400).json({
-        error: 'Incomplete quiz answers',
-        message: 'Expected 15 question answers'
+        error: 'Missing quiz answers',
+        message: 'Request body must include answers object'
       });
       return;
     }
 
+    // Validate only CRITICAL fields are present
+    const criticalFields: (keyof QuizAnswers)[] = ['experienceLevel', 'interests'];
+    const missingCritical = criticalFields.filter(field => !answers[field]);
+
+    if (missingCritical.length > 0) {
+      res.status(400).json({
+        error: 'Missing critical fields',
+        message: `Required fields: ${missingCritical.join(', ')}`,
+        fields: missingCritical
+      });
+      return;
+    }
+
+    // Validate critical field values
+    if (answers.interests.length === 0) {
+      res.status(400).json({
+        error: 'Invalid interests field',
+        message: 'At least one interest must be selected'
+      });
+      return;
+    }
+
+    // Fill in defaults for missing optional fields
+    const validatedAnswers: QuizAnswers = {
+      // Critical fields (no defaults)
+      experienceLevel: answers.experienceLevel,
+      interests: answers.interests,
+
+      // High-impact fields (defaults provided)
+      availability: answers.availability || '5-10h',
+      budget: answers.budget || '$0-100',
+      timeline: answers.timeline || 'flexible',
+      certification: answers.certification || 'not-important',
+
+      // Medium-impact fields (defaults provided)
+      learningGoal: answers.learningGoal || 'exploration',
+      programming: answers.programming || 'basic',
+      mathBackground: answers.mathBackground || 'basic'
+    };
+
+    // Track which fields were defaulted for warnings
+    const defaultedFields: string[] = [];
+    Object.keys(validatedAnswers).forEach(key => {
+      if (key !== 'experienceLevel' && key !== 'interests' && !answers[key as keyof QuizAnswers]) {
+        defaultedFields.push(key);
+      }
+    });
+
     console.log(`[${correlationId}] Processing quiz for user ${userId}`);
+    if (defaultedFields.length > 0) {
+      console.log(`[${correlationId}] Defaulted fields: ${defaultedFields.join(', ')}`);
+    }
 
     // Check cache (optional - gracefully skip if Redis not available)
-    const cacheKey = `quiz:result:${userId}:${hashQuizAnswers(answers)}`;
+    const cacheKey = `quiz:result:${userId}:${hashQuizAnswers(validatedAnswers)}`;
     let cached: QuizSubmissionResponse | null = null;
 
     try {
@@ -104,11 +155,17 @@ export async function scoreQuizHandler(req: Request, res: Response): Promise<voi
 
     if (useAgents) {
       // Multi-agent orchestration
-      result = await orchestrateAgents(userId, answers, correlationId);
+      result = await orchestrateAgents(userId, validatedAnswers, correlationId);
     } else {
       // Local processing (fallback for testing without agents deployed)
       console.log(`[${correlationId}] Using local processing (agents not configured)`);
-      result = await localScoreQuiz(userId, answers);
+      result = await localScoreQuiz(userId, validatedAnswers);
+    }
+
+    // Add warnings for defaulted fields
+    const warnings = generateWarnings(defaultedFields, validatedAnswers);
+    if (warnings.length > 0) {
+      result.warnings = warnings;
     }
 
     // Cache results (1 hour TTL) - gracefully skip if Redis not available
@@ -273,9 +330,8 @@ async function orchestrateAgents(
       learningGoals: answers.learningGoal,
       experienceLevel: answers.experienceLevel,
       availabilityHours: parseAvailabilityHours(answers.availability),
-      budgetRange: parseBudgetRange(answers.budget),
-      learningStyle: answers.learningStyle,
-      industry: answers.industry
+      budgetRange: parseBudgetRange(answers.budget)
+      // Removed: learningStyle and industry (fields no longer in quiz)
     });
     console.log(`[${correlationId}] User profile updated`);
   } catch (error) {
@@ -293,6 +349,44 @@ async function orchestrateAgents(
     processingTimeMs: 0, // Will be set by handler
     correlationId
   };
+}
+
+/**
+ * Generate warnings for defaulted/missing fields
+ */
+function generateWarnings(defaultedFields: string[], validatedAnswers: QuizAnswers): string[] {
+  const warnings: string[] = [];
+
+  // High-impact field warnings (affect recommendations significantly)
+  if (defaultedFields.includes('availability')) {
+    warnings.push('Time commitment not specified - defaulted to 5-10 hours/week. Recommendations may not fit your actual schedule.');
+  }
+  if (defaultedFields.includes('budget')) {
+    warnings.push('Budget not specified - defaulted to $0-100. Some recommended paths may exceed your actual budget.');
+  }
+  if (defaultedFields.includes('timeline')) {
+    warnings.push('Timeline not specified - defaulted to flexible. Recommendations may include longer paths than you need.');
+  }
+
+  // Medium-impact field warnings
+  if (defaultedFields.includes('certification')) {
+    warnings.push('Certification preference not specified - showing all paths regardless of certification availability.');
+  }
+  if (defaultedFields.includes('learningGoal')) {
+    warnings.push('Learning goal not specified - recommendations may not be optimized for your specific objective.');
+  }
+
+  // Info warnings (less critical)
+  if (defaultedFields.includes('programming') || defaultedFields.includes('mathBackground')) {
+    warnings.push('Background information not fully specified - recommendations based on experience level only.');
+  }
+
+  // General warning if many fields defaulted
+  if (defaultedFields.length >= 4) {
+    warnings.push(`Recommendations based on limited information (${9 - defaultedFields.length}/9 questions answered). For more personalized results, complete your profile.`);
+  }
+
+  return warnings;
 }
 
 /**

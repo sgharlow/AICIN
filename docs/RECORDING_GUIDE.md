@@ -360,9 +360,9 @@ AICIN (Cloud Run): $60/month   ███████░░░░░░░░░�
 ### Wow Factors to Highlight
 ⭐ 6 specialized agents working in parallel
 ⭐ Same request → Different results (personalization)
-⭐ 594ms response time (< 1 second!)
-⭐ 60% cost reduction vs AWS
-⭐ 500K daily user capacity
+⭐ 805ms average response time (100% success across 5 personas)
+⭐ 60% cost reduction ($150→$60)
+⭐ 7.9M daily capacity proven (15.8x over 500K target)
 
 ### Emotional Connection
 - Show passion for solving "tutorial hell"

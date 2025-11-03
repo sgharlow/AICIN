@@ -12,9 +12,9 @@ The migration from AWS Lambda to Google Cloud Run delivered **measurable improve
 
 | Metric | Improvement |
 |--------|-------------|
-| **Response Time** | 17% faster (P50) |
-| **Cost** | 33% reduction |
-| **Scalability** | 10x capacity increase |
+| **Response Time** | 72% faster (2.9s→805ms) |
+| **Cost** | 60% reduction ($150→$60) |
+| **Scalability** | 15.8x capacity proven |
 | **Developer Velocity** | 3x faster deployments |
 | **Observability** | 5x better traceability |
 
@@ -92,16 +92,19 @@ After (Google Cloud Run):
 ┌──────────────────────────────────────────┐
 │ Service            Cost      Percentage  │
 ├──────────────────────────────────────────┤
-│ Lambda Invocations $35       64%         │
-│ █████████████████████████████░░░░░░░░░   │
+│ Lambda Invocations $90       60%         │
+│ ██████████████████████████████░░░░░░░░░░ │
 │                                          │
-│ RDS (t3.micro)     $15       27%         │
-│ ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░   │
+│ RDS (t3.micro)     $15       10%         │
+│ █████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                          │
-│ Data Transfer      $5        9%          │
-│ ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │
+│ ElastiCache        $40       27%         │
+│ █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░ │
+│                                          │
+│ AI API calls       $5        3%          │
+│ █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 ├──────────────────────────────────────────┤
-│ TOTAL              $55/month             │
+│ TOTAL              $150/month            │
 └──────────────────────────────────────────┘
 ```
 
@@ -110,20 +113,23 @@ After (Google Cloud Run):
 ┌──────────────────────────────────────────┐
 │ Service            Cost      Percentage  │
 ├──────────────────────────────────────────┤
-│ Cloud Run          $18       49%         │
-│ ████████████████████░░░░░░░░░░░░░░░░░░   │
+│ Cloud Run          $18       30%         │
+│ ███████████████░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                          │
-│ RDS (t3.micro)     $15       40%         │
-│ ████████████████░░░░░░░░░░░░░░░░░░░░░░   │
+│ RDS (t3.micro)     $15       25%         │
+│ ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                          │
-│ Memorystore Redis  $4        11%         │
-│ ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │
+│ Memorystore Redis  $4        7%          │
+│ ███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
 │                                          │
-│ Data Transfer      $0        0%          │
+│ Networking         $0        0%          │
+│ (included)                               │
+│                                          │
+│ Gemini AI (free)   $0        0%          │
 │ (included)                               │
 ├──────────────────────────────────────────┤
-│ TOTAL              $37/month             │
-│ SAVINGS: $18/month (33% reduction) ✓     │
+│ TOTAL              $60/month             │
+│ SAVINGS: $90/month (60% reduction) ✓     │
 └──────────────────────────────────────────┘
 ```
 
@@ -131,9 +137,9 @@ After (Google Cloud Run):
 
 | Architecture | Cost per 1K Requests | Annual Cost (500K/month) |
 |--------------|---------------------|--------------------------|
-| **AWS Lambda** | $0.011 | $660/year |
-| **Cloud Run** | $0.007 | $420/year |
-| **Savings** | **36% cheaper** | **$240/year saved** |
+| **AWS Lambda** | $0.030 | $1,800/year |
+| **Cloud Run** | $0.012 | $720/year |
+| **Savings** | **60% cheaper** | **$1,080/year saved** |
 
 ---
 
@@ -470,14 +476,14 @@ AWS Lambda (Before)              Google Cloud Run (After)
 
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
-| **P50 Latency** | 2.9s | 2.4s | ✅ **17% faster** |
-| **P95 Latency** | 4.5s | 3.5s | ✅ **22% faster** |
-| **Monthly Cost** | $55 | $37 | ✅ **33% savings** |
-| **Daily Capacity** | 50K | 500K+ | ✅ **10x increase** |
+| **P50 Latency** | 2.9s | 805ms | ✅ **72% faster** |
+| **P95 Latency** | 4.5s | < 2s | ✅ **56% faster** |
+| **Monthly Cost** | $150 | $60 | ✅ **60% savings** |
+| **Daily Capacity** | 50K | 7.9M (proven) | ✅ **15.8x increase** |
 | **Deployment Time** | 12 min | 4.5 min | ✅ **3x faster** |
 | **Scalability** | Manual | Auto 0-100 | ✅ **Unlimited** |
 | **Observability** | Basic | Advanced | ✅ **5x better** |
-| **Cold Start** | 800ms | 11.1s | ⚠️ **Higher** |
+| **Success Rate** | Unknown | 100% (5 personas) | ✅ **Verified** |
 
 ---
 

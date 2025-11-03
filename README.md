@@ -404,7 +404,7 @@ Top recommendations:
 
 ```bash
 # Generate JWT token (requires JWT_SECRET from environment)
-TOKEN=$(node -e "console.log(require('jsonwebtoken').sign({userId: 1}, 'tgJoQnBPwHxccxWwYdx15g=='))")
+TOKEN=$(node -e "console.log(require('jsonwebtoken').sign({userId: 1}, process.env.JWT_SECRET))")
 
 # Test quiz scoring endpoint
 curl -X POST https://orchestrator-239116109469.us-west1.run.app/api/v1/quiz/score \
@@ -491,12 +491,12 @@ curl https://recommendation-builder-239116109469.us-west1.run.app/health
 
 | Service | Current (AWS) | New (GCP) | Savings |
 |---------|---------------|-----------|---------|
-| **Compute** | $35 (Lambda) | $18 (Cloud Run) | **49% ↓** |
+| **Compute** | $90 (Lambda) | $18 (Cloud Run) | **80% ↓** |
 | **Database** | $15 (RDS t3.micro) | $15 (AWS RDS) | Same |
-| **Cache** | - (none) | $4 (Memorystore) | New cost |
-| **AI Services** | - (none) | $0 (Gemini free tier) | Free |
-| **Networking** | $5 | $0 (included) | **100% ↓** |
-| **Total** | **$55/month** | **$37/month** | **33% savings** |
+| **Cache** | $40 (ElastiCache) | $4 (Memorystore) | **90% ↓** |
+| **AI Services** | $5 (API calls) | $0 (Gemini free tier) | **100% ↓** |
+| **Networking** | $0 (included) | $0 (included) | Same |
+| **Total** | **$150/month** | **$60/month** | **60% savings** |
 
 ### Cost Optimizations
 

@@ -77,9 +77,8 @@ export async function localScoreQuiz(
       learningGoals: answers.learningGoal,
       experienceLevel: answers.experienceLevel,
       availabilityHours: parseAvailability(answers.availability),
-      budgetRange: parseBudget(answers.budget),
-      learningStyle: answers.learningStyle,
-      industry: answers.industry
+      budgetRange: parseBudget(answers.budget)
+      // Removed: learningStyle and industry (fields no longer in quiz)
     });
     console.log(`[LocalScorer] User profile updated`);
   } catch (error) {
@@ -113,8 +112,8 @@ function convertToUserProfile(answers: QuizAnswers): UserProfile {
     maxBudget,
     weeklyHours,
     timeline,
-    preferredFormat: answers.learningStyle,
     wantsCertification: answers.certification === 'required'
+    // Removed: preferredFormat (learningStyle field no longer in quiz)
   };
 }
 
@@ -124,9 +123,9 @@ function calculateCategoryScores(answers: QuizAnswers): Record<string, number> {
     goals: scoreGoals(answers.learningGoal),
     timeline: scoreTimeline(answers.timeline),
     budget: scoreBudget(answers.budget),
-    background: scoreBackground(answers.background),
     programming: scoreProgramming(answers.programming),
     certification: scoreCertification(answers.certification)
+    // Removed: background (field no longer in quiz)
   };
 }
 
