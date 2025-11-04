@@ -1,0 +1,20 @@
+steps:
+  # Build the Docker image using the content-matcher Dockerfile from root context
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/content-matcher:latest'
+      - '-f'
+      - 'agents/content-matcher/Dockerfile'
+      - '.'
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/content-matcher:latest'
+
+# Store the built image
+images:
+  - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/content-matcher:latest'

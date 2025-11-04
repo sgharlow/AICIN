@@ -220,7 +220,7 @@ Effective system capacity: ~1,650 RPS (limited by Content Matcher/Path Optimizer
 
 1. **Performance:** 72% faster response times (2.9s→805ms)
 2. **Cost:** 60% reduction in monthly infrastructure costs ($150→$60)
-3. **Scalability:** Auto-scaling + proven 7.9M daily capacity
+3. **Scalability:** Auto-scaling architecture (0-100 instances per agent)
 4. **Observability:** Built-in Cloud Logging with correlation IDs
 5. **Resilience:** Graceful degradation for optional services (Redis, Gemini)
 

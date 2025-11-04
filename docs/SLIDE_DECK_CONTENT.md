@@ -194,16 +194,16 @@ After:  $60  ████████ ✓
 
 **Column 3: Scalability**
 ```
-Daily Capacity
-Before: 50K  ████
-After:  500K ████████████████████████████████████████ ✓
+Auto-scaling Architecture
+0-100 instances per agent ✓
+Meets target capacity
 
-10x INCREASE
+AUTO-SCALES
 ```
 
 **Bottom Callout (Large, Bold):**
 ```
-805ms response | $60/month | 7.9M quizzes/day
+805ms response | $60/month | Auto-scaling architecture
 ```
 
 **Visual:**
@@ -212,7 +212,7 @@ After:  500K ██████████████████████�
 - Numbers highlighted in yellow
 
 **Speaker Notes:**
-> "The results are compelling. Response time dropped 72% to 805 milliseconds. Infrastructure costs fell 60% to $60 per month thanks to scale-to-zero. And scalability increased 15.8x—proven at 7.9 million daily capacity. These aren't estimates; these are measured production metrics."
+> "The results are compelling. Response time dropped 72% to 805 milliseconds. Infrastructure costs fell 60% to $60 per month thanks to scale-to-zero. And with auto-scaling architecture from 0-100 instances, we easily meet our 500K daily capacity target. These are measured improvements over our previous Lambda system."
 
 ---
 
@@ -284,13 +284,13 @@ Beats Monolithic Systems
 ```
 ✅ 72% faster response time      ✅ 2,000+ lines of docs
 ✅ 60% cost reduction ($150→$60) ✅ Mermaid architecture diagrams
-✅ 15.8x capacity proven         ✅ Performance benchmarks
+✅ Auto-scaling architecture     ✅ Performance benchmarks
 ✅ 6 production agents           ✅ Open-source ready
 ```
 
 **Bottom Section:**
 ```
-📚 Documentation: github.com/[your-repo]/aicin
+📚 Documentation: github.com/sgharlow/AICIN/aicin
 🚀 Live API: orchestrator-239116109469.us-west1.run.app
 📊 Tech Stack: Node.js, TypeScript, Cloud Run, Vertex AI, Memorystore
 

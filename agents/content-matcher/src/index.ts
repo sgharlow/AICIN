@@ -78,7 +78,7 @@ function expandQuery(interests: string[]): string {
 }
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Increase payload limit for large path datasets
 
 // Initialize cache if Redis is available
 if (process.env.REDIS_HOST) {

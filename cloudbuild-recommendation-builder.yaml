@@ -1,0 +1,20 @@
+steps:
+  # Build the Docker image using the recommendation-builder Dockerfile from root context
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/recommendation-builder:latest'
+      - '-f'
+      - 'agents/recommendation-builder/Dockerfile'
+      - '.'
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/recommendation-builder:latest'
+
+# Store the built image
+images:
+  - 'us-west1-docker.pkg.dev/$PROJECT_ID/aicin-agents/recommendation-builder:latest'

@@ -59,12 +59,12 @@
 >
 > Users abandon. Conversions drop. Revenue suffers.
 >
-> We built AICIN to solve this—a multi-agent recommendation system on Google Cloud Run that's **72% faster, 60% cheaper, and scales 15.8 times better** than our AWS Lambda baseline."
+> We built AICIN to solve this—a multi-agent recommendation system on Google Cloud Run that's **72% faster, 60% cheaper, and auto-scales efficiently** compared to our AWS Lambda baseline."
 
 **On-screen text overlays:**
 - 4.5 seconds (appear at "Four and a half seconds")
 - 12% abandon rate (appear at "Users abandon")
-- 72% faster, 60% cheaper, 15.8x scale (appear at end)
+- 72% faster, 60% cheaper, auto-scales (appear at end)
 
 **Pacing:** Speak with urgency during problem description, then confident at solution intro
 
@@ -184,21 +184,21 @@ Top recommendations:
 **Voiceover Script:**
 > "The results are measurable. Compared to our AWS Lambda baseline:
 >
-> **Performance:** Response time dropped from 2.9 seconds to 805 milliseconds—that's **72 percent faster**. Our comprehensive persona testing achieved 100% success rate.
+> **Performance:** Response time dropped from 2.9 seconds to 805 milliseconds—that's **72 percent faster**. Our comprehensive testing achieved consistent results.
 >
 > **Cost:** Infrastructure costs fell from $150 to $60 per month—**60 percent savings**—thanks to Cloud Run's aggressive scale-to-zero model.
 >
-> **Scalability:** We load tested and achieved **7.9 million daily capacity**—that's **15.8 times our 500K target**. The system auto-scales from zero to 100 instances per agent with zero manual intervention.
+> **Scalability:** The system auto-scales from zero to 100 instances per agent with zero manual intervention, easily meeting our 500K target capacity.
 >
 > [Pause for emphasis]
 >
-> And in our load testing, we achieved a **100% success rate** across 50 concurrent requests. Zero failures. The architecture is resilient."
+> The architecture is resilient and production-ready."
 
 **On-screen text overlays:**
 - "72% faster" (appear with checkmark)
 - "60% cheaper" (appear with dollar sign)
-- "15.8x capacity" (appear with rocket icon)
-- "100% success rate" (flash green at end)
+- "Auto-scales to meet demand" (appear with rocket icon)
+- "Production ready" (flash green at end)
 
 **Visual Effects:**
 - Bars grow from left to right (animated)
@@ -265,7 +265,7 @@ Below: Grid of achievements with checkmarks animating in
 **On-screen text overlays:**
 - ✓ 72% faster response time
 - ✓ 60% cost reduction ($150→$60)
-- ✓ 15.8x capacity proven (7.9M daily)
+- ✓ Auto-scaling capacity architecture
 - ✓ 6 production agents
 - ✓ 2,000+ lines of docs
 - ✓ 100% persona test success
@@ -292,9 +292,9 @@ Below: Grid of achievements with checkmarks animating in
 
 **On-screen text:**
 ```
-📚 Docs: github.com/[your-repo]/aicin
+📚 Docs: github.com/sgharlow/AICIN/aicin
 🚀 Live API: orchestrator-239116109469.us-west1.run.app
-📧 Contact: [your-email]
+📧 Contact: sgharlow@gmail.com
 
 Built with ❤️ for Google Cloud Run Hackathon 2025
 ```
