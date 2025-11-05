@@ -22,12 +22,12 @@
 **Show:** Title card
 
 **Script:**
-> "What if you could recommend the perfect AI course from 3,950 options in just 2 seconds? That's what AICIN does using a multi-agent architecture on Google Cloud Run."
+> "What if you could recommend the perfect AI course from 3,950 options in around 6 seconds using comprehensive 3-layer analysis? That's what AICIN does using a multi-agent architecture on Google Cloud Run."
 
 **On-Screen Text:**
 - AICIN - AI Course Intelligence Network
 - 6 Cloud Run Microservices
-- ~2 Second Response Time
+- ~6 Second Response Time (Comprehensive Analysis)
 - 100% Success Rate Verified
 
 ---
@@ -109,14 +109,14 @@
 **Show:** Loading animation, then results
 
 **Script (continued):**
-> "In just 2 seconds, AICIN analyzed my profile against 251 learning paths.
+> "In around 6 seconds, AICIN analyzed my profile against 251 learning paths using comprehensive 3-layer scoring: TF-IDF semantic analysis, metadata matching, and course quality validation.
 >
 > Look at these results: 96% match for Intermediate Text Generation, 96% for Azure Machine Learning, 96% for AWS Machine Learning.
 >
 > These aren't random - the system actually understands my intermediate level, project-based preference, and career goals."
 
 **Point Out:**
-- Response time: ~2 seconds
+- Response time: ~6 seconds (comprehensive 3-layer analysis)
 - Top scores: 96% match
 - 5 personalized recommendations
 - Explainable match reasons
@@ -163,7 +163,7 @@
 
 **On-Screen Text:**
 - ✅ 100% Success Rate (5/5)
-- ✅ ~2s Average Response
+- ✅ ~6s Average Response (Comprehensive)
 - ✅ 0.92-0.96 Match Quality
 - ✅ Production Database
 
@@ -201,9 +201,9 @@
 >
 > We went from 15 questions to 9 - that's 40% fewer, based on actual usage data.
 >
-> Response time is consistently around 2 seconds with 100% reliability.
+> Response time is consistently around 6 seconds for comprehensive 3-layer analysis with 100% reliability.
 >
-> Match quality improved from random recommendations to 0.92-0.96 scores.
+> Match quality improved from basic recommendations to 0.92-0.96 scores using sophisticated TF-IDF semantic matching.
 >
 > And we're projecting 60% cost savings compared to our AWS Lambda setup."
 
@@ -211,8 +211,8 @@
 | Metric | Before | After |
 |--------|--------|-------|
 | Questions | 15 | 9 (40% fewer) |
-| Response Time | Slower | ~2s (verified) |
-| Match Quality | Poor (0.32) | Excellent (0.96) |
+| Response Time | Varied | ~6s (comprehensive) |
+| Match Quality | Basic | Excellent (0.96) |
 | Success Rate | Unknown | 100% (proven) |
 
 ---
@@ -271,10 +271,11 @@ Powered by Cloud Run, Vertex AI, Memorystore
 **What to emphasize:**
 - ✅ Real production system (not a demo)
 - ✅ 100% success rate (verified with diverse personas)
-- ✅ ~2 second response time (consistently measured)
+- ✅ ~6 second response time for comprehensive 3-layer analysis
 - ✅ 3,950 real courses, 251 learning paths
 - ✅ Multi-agent architecture with 6 Cloud Run services
 - ✅ Deep GCP integration (5+ services)
+- ✅ Prioritizes accuracy over speed (sophisticated scoring)
 
 **What NOT to claim:**
 - ❌ Don't mention load testing capacity
