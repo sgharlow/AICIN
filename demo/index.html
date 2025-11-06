@@ -551,6 +551,7 @@
     <script>
         let currentQuestion = 1;
         const totalQuestions = 9;
+        // Use deployed orchestrator (working, but needs scoring fixes)
         const ORCHESTRATOR_URL = 'https://orchestrator-239116109469.us-west1.run.app/api/v1/quiz/score';
 
         // For demo purposes - In production, this would be obtained from your auth system
@@ -572,15 +573,27 @@
                 const inputs = current.querySelectorAll('input[required]');
                 let isValid = false;
 
-                inputs.forEach(input => {
-                    if (input.type === 'checkbox') {
-                        const checkboxes = current.querySelectorAll('input[name="' + input.name + '"]');
-                        const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
-                        if (anyChecked) isValid = true;
-                    } else if (input.checked) {
+                if (inputs.length > 0) {
+                    // Validate required inputs (radio buttons)
+                    inputs.forEach(input => {
+                        if (input.type === 'checkbox') {
+                            const checkboxes = current.querySelectorAll('input[name="' + input.name + '"]');
+                            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                            if (anyChecked) isValid = true;
+                        } else if (input.checked) {
+                            isValid = true;
+                        }
+                    });
+                } else {
+                    // Special handling for checkbox questions (not marked as required)
+                    const checkboxes = current.querySelectorAll('input[type="checkbox"]');
+                    if (checkboxes.length > 0) {
+                        isValid = Array.from(checkboxes).some(cb => cb.checked);
+                    } else {
+                        // No validation needed for this question
                         isValid = true;
                     }
-                });
+                }
 
                 if (!isValid && currentQuestion < totalQuestions) {
                     alert('Please answer this question before continuing.');
@@ -737,7 +750,24 @@
                         </div>
                         ${rec.matchReasons && rec.matchReasons.length > 0 ? `
                             <div class="rec-reason">
-                                <strong>Why this path:</strong> ${rec.matchReasons[0]}
+                                <strong>Why this matches:</strong>
+                                <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+                                    ${rec.matchReasons.map(r => {
+                                        const reasonText = typeof r === 'string' ? r : (r.reason || r.text || '');
+                                        const category = r.category ? ` (${r.category})` : '';
+                                        return `<li>${reasonText}${category}</li>`;
+                                    }).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${rec.categoryBreakdown ? `
+                            <div class="rec-reason" style="margin-top: 8px;">
+                                <strong>Match breakdown:</strong>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 4px; font-size: 12px;">
+                                    ${Object.entries(rec.categoryBreakdown).map(([key, value]) =>
+                                        `<div>• ${key}: ${Math.round(value * 100)}%</div>`
+                                    ).join('')}
+                                </div>
                             </div>
                         ` : ''}
                     </div>

@@ -10,7 +10,7 @@ const cors = require('cors');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
-const PORT = process.env.DEMO_PORT || 3000;
+const PORT = process.env.DEMO_PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'tgJoQnBPwHxccxWwYdx15g==';
 
 app.use(cors());
