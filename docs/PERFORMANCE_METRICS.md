@@ -12,11 +12,11 @@
 
 The AICIN multi-agent system demonstrates **proven performance** on Google Cloud Run with:
 - ✅ **2-3 second average response time** with warm instances (14s cold start)
-- ✅ **Consistent 2.0-2.5s range** across multiple test scenarios
+- ✅ **Consistent 2.3-2.9s range** across multiple test scenarios
 - ✅ **5 personalized recommendations** per quiz submission
 - ✅ **100% success rate** across all multi-agent workflow tests (3/3 scenarios)
 - ✅ **All 6 agents** deployed and operational
-- ✅ **Excellent differentiation** (98% → 61% score range)
+- ✅ **Excellent differentiation** (78% → 51% score range)
 
 ---
 
@@ -28,7 +28,7 @@ The AICIN multi-agent system demonstrates **proven performance** on Google Cloud
 - **Request Type:** POST to `/api/v1/quiz/score`
 - **Authentication:** JWT token
 - **Network:** External HTTPS requests to Cloud Run services
-- **Date Tested:** November 5, 2025, 10:00 PM
+- **Date Tested:** November 6, 2025, 8:20 PM
 
 ### Test Scenarios
 
@@ -44,9 +44,9 @@ The AICIN multi-agent system demonstrates **proven performance** on Google Cloud
 
 | Metric | Cold Start | Warm Instance | Status |
 |--------|-----------|---------------|--------|
-| **Total Response Time** | 13.7s (first request) | 2.0-2.5s (typical) | ✅ **Excellent** |
+| **Total Response Time** | 13.7s (first request) | 2.3-2.9s (typical) | ✅ **Excellent** |
 | **Recommendations Returned** | 5 | 5 | ✅ Perfect |
-| **Score Differentiation** | 98% → 61% | 98% → 61% | ✅ Working |
+| **Score Differentiation** | 78% → 51% | 78% → 51% | ✅ Working |
 | **Interest Matching** | 100% accuracy | 100% accuracy | ✅ Excellent |
 | **HTTP Status** | 200 OK | 200 OK | ✅ Success |
 
@@ -73,16 +73,16 @@ The AICIN multi-agent system demonstrates **proven performance** on Google Cloud
 - After first request, instances stay warm for subsequent requests
 - Typical users won't experience cold start (traffic keeps instances warm)
 
-### Typical Performance (2.2s average) ✅
+### Typical Performance (2.45s average) ✅
 
 **Actual Test Results:**
 
 | Test Scenario | Response Time | Top Score | Status |
 |--------------|---------------|-----------|--------|
-| **Computer Vision - Intermediate** | 2,468ms (2.5s) | 98% | ✅ Excellent |
-| **Machine Learning - Beginner** | 1,978ms (2.0s) | 98% | ✅ Excellent |
-| **NLP - Advanced** | 2,175ms (2.2s) | 84% | ✅ Good |
-| **AVERAGE** | **2,207ms (2.2s)** | **93%** | ✅ **Proven** |
+| **Computer Vision - Intermediate** | 2,878ms (2.9s) | 78% | ✅ Excellent |
+| **Machine Learning - Beginner** | 2,313ms (2.3s) | 76% | ✅ Excellent |
+| **NLP - Advanced** | 2,161ms (2.2s) | 61% | ✅ Good |
+| **AVERAGE** | **2,451ms (2.45s)** | **72%** | ✅ **Proven** |
 
 **Performance Breakdown (estimated):**
 

@@ -68,7 +68,7 @@
 >
 > Content Matcher uses TF-IDF natural language processing for semantic similarity.
 >
-> Path Optimizer applies our 3-layer scoring algorithm - 40% content match, 35% metadata fit, 25% course quality.
+> Path Optimizer applies our 2-layer scoring algorithm - 30% content match for semantic similarity, 70% metadata fit for learner requirements like experience level, budget, and timeline.
 >
 > Course Validator ensures data completeness.
 >
@@ -111,13 +111,13 @@
 **Script (continued):**
 > "In just 2.5 seconds, AICIN analyzed my profile against 251 learning paths using 7-dimensional scoring: experience level, interests, timeline, budget, goals, programming background, and certification preferences.
 >
-> Look at these results: 98% match for Intermediate Google Cloud Vision API, 84% for Complete Computer Vision Journey.
+> Look at these results: 78% match for Complete Computer Vision Journey, 77% for Intermediate Google Cloud Vision API, 74% for Intermediate Computer Vision.
 >
 > Notice the differentiation? These aren't all the same score - the system is actually running TF-IDF semantic analysis and differentiating between paths based on fit."
 
 **Point Out:**
 - Response time: 2.5 seconds (warm instances)
-- Top scores: 98% → 84% → 77% (real differentiation)
+- Top scores: 78% → 77% → 74% (real differentiation)
 - 5 personalized recommendations
 - Explainable match reasons
 
@@ -155,7 +155,7 @@
 >
 > 100% success rate across 3 test scenarios: Computer Vision intermediate learners, Machine Learning beginners, and advanced NLP specialists.
 >
-> The system correctly matched interest topics to learning paths in all cases, with excellent score differentiation - 98% for best matches down to 61% for poor fits.
+> The system correctly matched interest topics to learning paths in all cases, with excellent score differentiation - 78% for best matches down to 51% for lower-priority paths.
 >
 > Average response time: 2.2 seconds with warm instances."
 
@@ -163,8 +163,8 @@
 
 **On-Screen Text:**
 - ✅ 100% Success Rate (3/3)
-- ✅ 2.2s Average (Warm Instances)
-- ✅ 98% → 61% Score Differentiation
+- ✅ 2.45s Average (Warm Instances)
+- ✅ 78% → 51% Score Differentiation
 - ✅ Real Multi-Agent System
 
 ---
@@ -203,7 +203,7 @@
 >
 > Response time is 2-3 seconds for warm instances, with sophisticated 7-dimensional scoring and TF-IDF semantic analysis.
 >
-> Score differentiation is excellent - 98% for perfect matches down to 61% for poor fits. The system is actually thinking, not just returning the same score for everything.
+> Score differentiation is excellent - 78% for best matches down to 51% for lower-priority paths. The system is actually thinking, not just returning the same score for everything.
 >
 > And we're projecting 60% cost savings compared to AWS Lambda."
 
@@ -212,7 +212,7 @@
 |--------|--------|-------|
 | Architecture | Monolithic | 6 Services |
 | Response Time | Unknown | 2-3s (warm) |
-| Score Range | Unknown | 98% → 61% |
+| Score Range | Unknown | 78% → 51% |
 | Success Rate | Unknown | 100% (proven) |
 
 ---
@@ -275,7 +275,7 @@ Powered by Cloud Run, Vertex AI, Memorystore
 - ✅ 3,950 real courses, 251 learning paths
 - ✅ True multi-agent architecture: 6 Cloud Run services actually communicating
 - ✅ Deep GCP integration (Cloud Run, Vertex AI, Memorystore, Secret Manager, Cloud Logging)
-- ✅ Real differentiation: Scores range 98% → 61% (not all the same)
+- ✅ Real differentiation: Scores range 78% → 51% (not all the same)
 
 **What NOT to claim:**
 - ❌ Don't mention load testing capacity
@@ -288,9 +288,9 @@ Powered by Cloud Run, Vertex AI, Memorystore
 ## TROUBLESHOOTING
 
 **If demo doesn't work during recording:**
-1. Stop and restart: `cd demo && npm start`
+1. Stop and restart: `cd demo && node server.js`
 2. Verify orchestrator: `curl https://orchestrator-239116109469.us-west1.run.app/health`
-3. Test JWT: `curl http://localhost:3000/api/demo-token`
+3. Test JWT: `curl http://localhost:3001/api/demo-token`
 4. Use backup: Show terminal test output instead
 
 **If services are down:**
