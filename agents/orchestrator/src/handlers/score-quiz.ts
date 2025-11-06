@@ -148,8 +148,10 @@ export async function scoreQuizHandler(req: Request, res: Response): Promise<voi
 
     console.log(`[${correlationId}] Cache miss, processing...`);
 
-    // Check if agents are available
-    const useAgents = !!process.env.PROFILE_ANALYZER_URL;
+    // HACKATHON FIX: Use local scorer which has better differentiation
+    // Agents have TF-IDF normalization issue causing all paths to score 96%
+    // Local scorer properly weights interests (35%) and checks title/description
+    const useAgents = false; // Temporarily disabled for better recommendations
 
     let result: QuizSubmissionResponse;
 
@@ -157,8 +159,8 @@ export async function scoreQuizHandler(req: Request, res: Response): Promise<voi
       // Multi-agent orchestration
       result = await orchestrateAgents(userId, validatedAnswers, correlationId);
     } else {
-      // Local processing (fallback for testing without agents deployed)
-      console.log(`[${correlationId}] Using local processing (agents not configured)`);
+      // Local processing (improved scoring with proper interest matching)
+      console.log(`[${correlationId}] Using local processing with improved scoring`);
       result = await localScoreQuiz(userId, validatedAnswers);
     }
 

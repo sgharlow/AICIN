@@ -61,8 +61,15 @@ export function getContentScore(pathId: string, contentScores: Map<string, numbe
     console.log(`[DEBUG] Sample contentScores keys: ${keys.join(', ')}`);
   }
 
-  // Normalize to 0-1 range (TF-IDF scores typically 0-2)
-  return Math.min(score, 1.0);
+  // FIXED: Properly normalize TF-IDF scores to 0-1 range
+  // TF-IDF scores typically range from 0-3 for high relevance
+  // Divide by 2.5 to spread scores across 0-1 range, capping at 1.0
+  // This creates gradations:
+  //   - Perfect match (2.5): 1.0
+  //   - Strong match (2.0): 0.8
+  //   - Good match (1.5): 0.6
+  //   - Weak match (0.5): 0.2
+  return Math.min(score / 2.5, 1.0);
 }
 
 /**

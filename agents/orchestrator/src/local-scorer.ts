@@ -134,15 +134,15 @@ function calculatePathMatch(
   answers: QuizAnswers,
   categoryScores: Record<string, number>
 ): { matchScore: number; confidence: 'low' | 'medium' | 'high'; matchReasons: any[]; categoryBreakdown: any } {
+  // UPDATED WEIGHTS: Interests now heavily weighted for better differentiation
   const weights = {
-    experience: 0.20,
+    experience: 0.25,
+    interests: 0.35,   // Increased from 0.08 to 0.35 - PRIMARY FILTER
     goals: 0.15,
-    timeline: 0.15,
-    budget: 0.12,
-    background: 0.10,
-    interests: 0.08,
-    programming: 0.08,
-    certification: 0.03
+    timeline: 0.10,
+    budget: 0.08,
+    programming: 0.05,
+    certification: 0.02
   };
 
   let totalScore = 0;
@@ -150,7 +150,9 @@ function calculatePathMatch(
   const matchReasons: any[] = [];
 
   // Experience matching
-  const experienceMatch = matchExperienceLevel(answers.experienceLevel, path.level || 'beginner');
+  // Database uses 'difficulty' field, not 'level'
+  const pathLevel = (path.difficulty || path.level || 'beginner').toLowerCase();
+  const experienceMatch = matchExperienceLevel(answers.experienceLevel, pathLevel);
   totalScore += experienceMatch * weights.experience;
   categoryBreakdown.experience = experienceMatch;
 
@@ -160,6 +162,27 @@ function calculatePathMatch(
       weight: weights.experience,
       category: 'experience'
     });
+  }
+
+  // Interests matching - NOW PRIMARY FILTER
+  const interestsMatch = matchInterests(answers.interests, path);
+  totalScore += interestsMatch * weights.interests;
+  categoryBreakdown.interests = interestsMatch;
+
+  if (interestsMatch > 0) {
+    const matchedTopics = (path.topics || []).filter((topic: string) =>
+      answers.interests.some(interest =>
+        topic.toLowerCase().includes(interest.toLowerCase()) ||
+        interest.toLowerCase().includes(topic.toLowerCase())
+      )
+    );
+    if (matchedTopics.length > 0) {
+      matchReasons.push({
+        reason: `Matches interest: ${matchedTopics.slice(0, 2).join(', ')}`,
+        weight: weights.interests,
+        category: 'ai-insight'
+      });
+    }
   }
 
   // Budget matching
@@ -175,10 +198,20 @@ function calculatePathMatch(
     });
   }
 
-  // Interests matching
-  const interestsMatch = matchInterests(answers.interests, path);
-  totalScore += interestsMatch * weights.interests;
-  categoryBreakdown.interests = interestsMatch;
+  // Goals matching
+  const goalsMatch = matchGoals(answers.learningGoal, path);
+  totalScore += goalsMatch * weights.goals;
+  categoryBreakdown.goals = goalsMatch;
+
+  // Timeline matching
+  const timelineMatch = matchTimeline(answers.timeline, answers.availability, path);
+  totalScore += timelineMatch * weights.timeline;
+  categoryBreakdown.timeline = timelineMatch;
+
+  // Programming matching
+  const programmingMatch = matchProgramming(answers.programming, path.level);
+  totalScore += programmingMatch * weights.programming;
+  categoryBreakdown.programming = programmingMatch;
 
   const confidence = determineConfidence(totalScore, matchReasons.length);
 
@@ -243,12 +276,82 @@ function matchBudget(budget: string, path: any): number {
 }
 
 function matchInterests(interests: string[], path: any): number {
-  const pathTopics = (path.topics || []).map((t: string) => t.toLowerCase());
-  const userInterests = interests.map((i: string) => i.toLowerCase());
-  const matches = userInterests.filter((i: string) =>
-    pathTopics.some((t: string) => t.includes(i) || i.includes(t))
-  );
-  return matches.length / Math.max(userInterests.length, 1);
+  if (!interests || interests.length === 0) return 0.5;
+
+  // Normalize text: lowercase and replace hyphens with spaces
+  const normalize = (text: string) => text.toLowerCase().replace(/-/g, ' ');
+
+  const pathTitle = normalize(path.title || '');
+  const pathDescription = normalize(path.description || '');
+  const pathSummary = normalize(path.summary || '');
+
+  let matchCount = 0;
+
+  for (const interest of interests) {
+    const normalizedInterest = normalize(interest);
+
+    // Check title (strongest signal)
+    if (pathTitle.includes(normalizedInterest)) {
+      matchCount += 1.0;
+    }
+    // Check summary (strong signal)
+    else if (pathSummary.includes(normalizedInterest)) {
+      matchCount += 0.8;
+    }
+    // Check description (good signal)
+    else if (pathDescription.includes(normalizedInterest)) {
+      matchCount += 0.6;
+    }
+  }
+
+  return Math.min(matchCount / interests.length, 1.0);
+}
+
+function matchGoals(goal: string, path: any): number {
+  // Goals affect preference for structured vs exploratory paths
+  const structuredPaths = /complete|journey|bootcamp|comprehensive/i.test(path.title || '');
+
+  if (goal === 'career-switch' && structuredPaths) return 1.0;
+  if (goal === 'upskill' && !structuredPaths) return 1.0;
+  if (goal === 'specialize') return 0.9;
+  return 0.7;
+}
+
+function matchTimeline(timeline: string, availability: string, path: any): number {
+  const hours = path.estimated_hours || path.total_realistic_hours || 0;
+  if (hours === 0) return 0.7;
+
+  const weeklyHours = parseAvailability(availability);
+  const weeksNeeded = hours / weeklyHours;
+
+  const timelineWeeks: Record<string, number> = {
+    '1-3-months': 12,
+    '3-6-months': 24,
+    '6-12-months': 48,
+    '12+-months': 100
+  };
+
+  const targetWeeks = timelineWeeks[timeline] || 24;
+
+  if (weeksNeeded <= targetWeeks) return 1.0;
+  if (weeksNeeded <= targetWeeks * 1.5) return 0.7;
+  return 0.3;
+}
+
+function matchProgramming(programmingLevel: string, pathLevel: string): number {
+  // Programming experience should align with path difficulty
+  const progOrder = ['beginner', 'intermediate', 'advanced', 'expert'];
+  const levelOrder = ['beginner', 'intermediate', 'advanced'];
+
+  const progIndex = progOrder.indexOf(programmingLevel.toLowerCase());
+  const pathIndex = levelOrder.indexOf(pathLevel.toLowerCase());
+
+  if (progIndex === -1 || pathIndex === -1) return 0.7;
+
+  const diff = Math.abs(progIndex - pathIndex);
+  if (diff === 0) return 1.0;
+  if (diff === 1) return 0.8;
+  return 0.5;
 }
 
 function determineConfidence(score: number, reasonCount: number): 'low' | 'medium' | 'high' {
