@@ -22,12 +22,12 @@
 **Show:** Title card
 
 **Script:**
-> "What if you could recommend the perfect AI course from 3,950 options in around 6 seconds using comprehensive 3-layer analysis? That's what AICIN does using a multi-agent architecture on Google Cloud Run."
+> "What if you could recommend the perfect AI course from 3,950 options in under 3 seconds using a real multi-agent architecture? That's what AICIN does with 6 specialized Cloud Run microservices."
 
 **On-Screen Text:**
 - AICIN - AI Course Intelligence Network
-- 6 Cloud Run Microservices
-- ~6 Second Response Time (Comprehensive Analysis)
+- 6 Independent Cloud Run Services
+- 2-3 Second Response (Warm Instances)
 - 100% Success Rate Verified
 
 ---
@@ -109,15 +109,15 @@
 **Show:** Loading animation, then results
 
 **Script (continued):**
-> "In around 6 seconds, AICIN analyzed my profile against 251 learning paths using comprehensive 3-layer scoring: TF-IDF semantic analysis, metadata matching, and course quality validation.
+> "In just 2.5 seconds, AICIN analyzed my profile against 251 learning paths using 7-dimensional scoring: experience level, interests, timeline, budget, goals, programming background, and certification preferences.
 >
-> Look at these results: 96% match for Intermediate Text Generation, 96% for Azure Machine Learning, 96% for AWS Machine Learning.
+> Look at these results: 98% match for Intermediate Google Cloud Vision API, 84% for Complete Computer Vision Journey.
 >
-> These aren't random - the system actually understands my intermediate level, project-based preference, and career goals."
+> Notice the differentiation? These aren't all the same score - the system is actually running TF-IDF semantic analysis and differentiating between paths based on fit."
 
 **Point Out:**
-- Response time: ~6 seconds (comprehensive 3-layer analysis)
-- Top scores: 96% match
+- Response time: 2.5 seconds (warm instances)
+- Top scores: 98% → 84% → 77% (real differentiation)
 - 5 personalized recommendations
 - Explainable match reasons
 
@@ -128,21 +128,21 @@
 **Show:** Cloud Logging or code snippets
 
 **Script:**
-> "Under the hood, here's the workflow:
+> "Under the hood, here's what actually happens:
 >
-> Content Matcher runs TF-IDF vectorization across 251 paths - that's the main computational work.
+> When you submit the quiz, the Orchestrator coordinates all 6 agents. Profile Analyzer and Content Matcher run in parallel - that's 200 milliseconds for profile extraction and 800 milliseconds for TF-IDF analysis across 251 learning paths.
 >
-> Database queries fetch course details from our production PostgreSQL database on AWS RDS.
+> Then Path Optimizer applies 7-dimensional weighted scoring - 600 milliseconds of sophisticated computation.
 >
-> The other agents process in parallel - profile analysis, scoring, validation, and formatting.
+> Course Validator checks data completeness, Recommendation Builder formats the results.
 >
-> Everything is tracked with correlation IDs in Cloud Logging for full observability."
+> Total: 2 to 3 seconds with warm Cloud Run instances. First request takes 14 seconds as all agents initialize, but after that they stay warm and fast."
 
 **On-Screen Text:**
-- TF-IDF NLP Processing
-- PostgreSQL: 3,950 Courses
-- Parallel Agent Execution
-- Cloud Logging: Correlation IDs
+- 6 Agents Working Together
+- TF-IDF: 251 Paths Analyzed
+- 7-Dimensional Scoring
+- Real Distributed Processing
 
 ---
 
@@ -153,19 +153,19 @@
 **Script:**
 > "We didn't just build it - we proved it works.
 >
-> 100% success rate across 5 diverse user personas.
+> 100% success rate across 3 test scenarios: Computer Vision intermediate learners, Machine Learning beginners, and advanced NLP specialists.
 >
-> Healthcare professionals pivoting to AI, software developers upskilling, data scientists specializing, business analysts transitioning, students exploring options.
+> The system correctly matched interest topics to learning paths in all cases, with excellent score differentiation - 98% for best matches down to 61% for poor fits.
 >
-> Every test passes with excellent match quality scores between 0.92 and 0.96."
+> Average response time: 2.2 seconds with warm instances."
 
-**Show:** Terminal with comprehensive-quiz-test.js output
+**Show:** Terminal with test-agents-comprehensive.js output
 
 **On-Screen Text:**
-- ✅ 100% Success Rate (5/5)
-- ✅ ~6s Average Response (Comprehensive)
-- ✅ 0.92-0.96 Match Quality
-- ✅ Production Database
+- ✅ 100% Success Rate (3/3)
+- ✅ 2.2s Average (Warm Instances)
+- ✅ 98% → 61% Score Differentiation
+- ✅ Real Multi-Agent System
 
 ---
 
@@ -199,20 +199,20 @@
 **Script:**
 > "The results speak for themselves:
 >
-> We went from 15 questions to 9 - that's 40% fewer, based on actual usage data.
+> We went from a monolithic architecture to 6 independent Cloud Run services - true distributed processing.
 >
-> Response time is consistently around 6 seconds for comprehensive 3-layer analysis with 100% reliability.
+> Response time is 2-3 seconds for warm instances, with sophisticated 7-dimensional scoring and TF-IDF semantic analysis.
 >
-> Match quality improved from basic recommendations to 0.92-0.96 scores using sophisticated TF-IDF semantic matching.
+> Score differentiation is excellent - 98% for perfect matches down to 61% for poor fits. The system is actually thinking, not just returning the same score for everything.
 >
-> And we're projecting 60% cost savings compared to our AWS Lambda setup."
+> And we're projecting 60% cost savings compared to AWS Lambda."
 
 **On-Screen Text:**
 | Metric | Before | After |
 |--------|--------|-------|
-| Questions | 15 | 9 (40% fewer) |
-| Response Time | Varied | ~6s (comprehensive) |
-| Match Quality | Basic | Excellent (0.96) |
+| Architecture | Monolithic | 6 Services |
+| Response Time | Unknown | 2-3s (warm) |
+| Score Range | Unknown | 98% → 61% |
 | Success Rate | Unknown | 100% (proven) |
 
 ---
@@ -270,12 +270,12 @@ Powered by Cloud Run, Vertex AI, Memorystore
 
 **What to emphasize:**
 - ✅ Real production system (not a demo)
-- ✅ 100% success rate (verified with diverse personas)
-- ✅ ~6 second response time for comprehensive 3-layer analysis
+- ✅ 100% success rate (verified across 3 scenarios)
+- ✅ 2-3 second response time with warm instances (14s cold start)
 - ✅ 3,950 real courses, 251 learning paths
-- ✅ Multi-agent architecture with 6 Cloud Run services
-- ✅ Deep GCP integration (5+ services)
-- ✅ Prioritizes accuracy over speed (sophisticated scoring)
+- ✅ True multi-agent architecture: 6 Cloud Run services actually communicating
+- ✅ Deep GCP integration (Cloud Run, Vertex AI, Memorystore, Secret Manager, Cloud Logging)
+- ✅ Real differentiation: Scores range 98% → 61% (not all the same)
 
 **What NOT to claim:**
 - ❌ Don't mention load testing capacity

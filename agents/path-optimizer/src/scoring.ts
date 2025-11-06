@@ -62,14 +62,14 @@ export function getContentScore(pathId: string, contentScores: Map<string, numbe
   }
 
   // FIXED: Properly normalize TF-IDF scores to 0-1 range
-  // TF-IDF scores typically range from 0-3 for high relevance
-  // Divide by 2.5 to spread scores across 0-1 range, capping at 1.0
+  // TF-IDF scores typically range from 0-10 for high relevance
+  // Divide by 10 to spread scores across 0-1 range, capping at 1.0
   // This creates gradations:
-  //   - Perfect match (2.5): 1.0
-  //   - Strong match (2.0): 0.8
-  //   - Good match (1.5): 0.6
-  //   - Weak match (0.5): 0.2
-  return Math.min(score / 2.5, 1.0);
+  //   - Perfect match (10): 1.0
+  //   - Strong match (7.5): 0.75
+  //   - Good match (5.0): 0.5
+  //   - Weak match (2.5): 0.25
+  return Math.min(score / 10, 1.0);
 }
 
 /**
@@ -174,6 +174,7 @@ export function scorePath(
   const weights = calculateAdaptiveWeights(path);
 
   // Calculate layer scores (2-layer: content + metadata only)
+  // FIX: Use path.document_id to match Content Matcher's keys (orchestrator sends document_id as id)
   const contentScore = getContentScore(path.document_id, contentScores);
   const metadataScore = calculateMetadataScore(path, userProfile);
   const courseScore = 0; // Not used in 2-layer system (all paths are pre-validated for quality)

@@ -148,10 +148,10 @@ export async function scoreQuizHandler(req: Request, res: Response): Promise<voi
 
     console.log(`[${correlationId}] Cache miss, processing...`);
 
-    // HACKATHON FIX: Use local scorer which has better differentiation
-    // Agents have TF-IDF normalization issue causing all paths to score 96%
-    // Local scorer properly weights interests (35%) and checks title/description
-    const useAgents = false; // Temporarily disabled for better recommendations
+    // TESTING: Re-enable agents now that database has populated cost/hours
+    // Database fixes may have resolved the scoring issues
+    // If still broken, we'll apply fixes from local scorer to the agents
+    const useAgents = true; // RE-ENABLED for agent testing
 
     let result: QuizSubmissionResponse;
 
@@ -230,12 +230,14 @@ async function orchestrateAgents(
     ),
 
     // Content Matcher: build TF-IDF corpus and calculate content scores
+    // IMPORTANT: Send document_id as id so Content Matcher keys match Path Optimizer lookups
     invokeAgent<{ userProfile: any; learningPaths: any[] }, ContentMatcherResult>(
       'content-matcher',
       {
         userProfile: { interests: answers.interests }, // Minimal profile for content matching
         learningPaths: learningPaths.map(p => ({
-          id: p.document_id,
+          id: p.document_id,  // Use document_id so keys match between agents
+          document_id: p.document_id,  // Also include explicitly for clarity
           title: p.title,
           description: p.description,
           topics: p.topics || []
