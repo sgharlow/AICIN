@@ -23,8 +23,38 @@ dotenv.config();
 const app = express();
 const PORT = parseInt(process.env.PORT || '8080');
 
+// CORS Configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+  : ['*']; // Default: allow all origins (for development/hackathon)
+
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Allow all origins if * is configured
+    if (allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Reject origin
+    callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
+  credentials: true
+};
+
+console.log(`[Orchestrator] CORS configured with origins: ${allowedOrigins.join(', ')}`);
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 
 // Request logging
