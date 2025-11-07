@@ -305,3 +305,7 @@ Powered by Cloud Run, Vertex AI, Memorystore
 **PRODUCTION READY:** ✅
 
 Good luck with your recording! 🎬
+
+## Presentation location
+https://aicin-ai-course-intellig-pmlecg9.gamma.site/
+
