@@ -53,3 +53,9 @@ gcp-credentials.json
 
 # Docker
 .dockerignore
+
+# Archive folder (contains old dev docs)
+archive/
+
+# Backup files
+*.backup
