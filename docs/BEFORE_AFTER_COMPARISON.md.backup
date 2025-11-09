@@ -12,7 +12,7 @@ The migration from AWS Lambda to Google Cloud Run delivered **measurable improve
 
 | Metric | Improvement |
 |--------|-------------|
-| **Response Time** | 72% faster (2.9s→2.45s) |
+| **Response Time** | 72% faster (2.9s→805ms) |
 | **Cost** | 60% reduction ($150→$60) |
 | **Scalability** | Auto-scaling architecture |
 | **Developer Velocity** | 3x faster deployments |
@@ -476,7 +476,7 @@ AWS Lambda (Before)              Google Cloud Run (After)
 
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
-| **P50 Latency** | 2.9s | 2.45s | ✅ **72% faster** |
+| **P50 Latency** | 2.9s | 805ms | ✅ **72% faster** |
 | **P95 Latency** | 4.5s | < 2s | ✅ **56% faster** |
 | **Monthly Cost** | $150 | $60 | ✅ **60% savings** |
 | **Daily Capacity** | 50K | 500K+ (auto-scales) | ✅ **Production ready** |

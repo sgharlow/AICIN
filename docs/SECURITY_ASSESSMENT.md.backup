@@ -17,22 +17,22 @@
 
 1. **`scripts/load-test.js:11`**
    ```javascript
-   const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+   const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
    ```
 
 2. **`scripts/test-workflow.js:5`**
    ```javascript
-   const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+   const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
    ```
 
 3. **`scripts/test-db-fix-v3.js:5`**
    ```javascript
-   const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+   const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
    ```
 
 4. **`scripts/inspect-database-schema.js:14`**
    ```javascript
-   password: process.env.DATABASE_PASSWORD || 'YOUR_DATABASE_PASSWORD_HERE',
+   password: process.env.DATABASE_PASSWORD || '2I3kb0Z91Un8jd4mGf7CREbTHTY93Zdg7nnaeTISiiA=',
    ```
 
 5. **`scripts/comprehensive-quiz-test.js:13`**
@@ -92,8 +92,8 @@
 - AWS RDS hostname
 - Database name
 - Username: `learningai_admin`
-- Password: `YOUR_DATABASE_PASSWORD_HERE`
-- JWT_SECRET: `YOUR_JWT_SECRET_HERE`
+- Password: `2I3kb0Z91Un8jd4mGf7CREbTHTY93Zdg7nnaeTISiiA=`
+- JWT_SECRET: `tgJoQnBPwHxccxWwYdx15g==`
 
 **Current Protection:**
 - ✅ `.gitignore` includes `docs/archive/`
@@ -187,7 +187,7 @@
 1. **`scripts/load-test.js`**
    ```javascript
    // OLD (LINE 11)
-   const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+   const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
 
    // NEW
    const JWT_SECRET = process.env.TEST_JWT_SECRET;
@@ -205,7 +205,7 @@
 4. **`scripts/inspect-database-schema.js`**
    ```javascript
    // OLD (LINE 14)
-   password: process.env.DATABASE_PASSWORD || 'YOUR_DATABASE_PASSWORD_HERE',
+   password: process.env.DATABASE_PASSWORD || '2I3kb0Z91Un8jd4mGf7CREbTHTY93Zdg7nnaeTISiiA=',
 
    // NEW
    password: process.env.DATABASE_PASSWORD
@@ -293,8 +293,8 @@ Before submitting to hackathon:
 - [ ] Run final grep for sensitive patterns:
   ```bash
   # Should return NO results outside of node_modules
-  grep -r "YOUR_DATABASE_PASSWORD_HERE" . --exclude-dir=node_modules
-  grep -r "YOUR_JWT_SECRET_HERE" . --exclude-dir=node_modules
+  grep -r "2I3kb0Z91Un8jd4mGf7CREbTHTY93Zdg7nnaeTISiiA=" . --exclude-dir=node_modules
+  grep -r "tgJoQnBPwHxccxWwYdx15g==" . --exclude-dir=node_modules
   ```
 - [ ] Review all markdown files one more time
 - [ ] Confirm no `.env` file is committed

@@ -1,0 +1,51 @@
+flowchart TB
+    %% 1. Entry
+    User[User / Next.js UI] -->|HTTPS: /api/v1/quiz/score| API[Orchestrator API\n(Google Cloud Run)]
+
+    %% 2. Orchestrator responsibilities
+    API -->|JWT auth, routing,\ncorrelation ID, cache check| SVC[Multi-Agent Services]
+
+    subgraph "Google Cloud Run"
+        direction LR
+        PA[Profile Analyzer\n(quiz → user profile)]
+        CM[Content Matcher\n(TF-IDF / similarity)]
+        PO[Path Optimizer\n(3-layer scoring)]
+        CV[Course Validator\n(quality + fit)]
+        RB[Recommendation Builder\n(top 5 + reasons)]
+    end
+
+    SVC --- PA
+    SVC --- CM
+    SVC --- PO
+    SVC --- CV
+    SVC --- RB
+
+    %% 3. Data + AI
+    CM -->|read/cache| REDIS[(Memorystore Redis)]
+    PA -->|read/write| DB[(PostgreSQL / Cloud SQL\n251 paths · 3,950 courses)]
+    CM -->|read| DB
+    PO -->|read| DB
+    CV -->|read| DB
+    RB -->|write results| DB
+
+    PO -. optional enrich .-> GEM[Vertex AI\nGemini 1.5 Flash]
+
+    %% 4. Return
+    RB -->|Top 5 recommendations\n+ match reasons (≤2.5s)| API --> User
+
+    %% 5. Observability / Security (small boxes)
+    API -. logs .-> LOGS[(Cloud Logging)]
+    API -. secrets .-> SECR[(Secret Manager)]
+
+    classDef entry fill:#e8f4ff,stroke:#2b6cb0,stroke-width:1px,color:#1a365d;
+    classDef api fill:#3182ce,stroke:#1a365d,stroke-width:1px,color:#fff;
+    classDef agent fill:#48bb78,stroke:#2f855a,stroke-width:1px,color:#fff;
+    classDef data fill:#f6ad55,stroke:#c05621,stroke-width:1px,color:#1a202c;
+    classDef aux fill:#e9d8fd,stroke:#805ad5,stroke-width:1px,color:#1a202c;
+
+    class User entry;
+    class API api;
+    class PA,CM,PO,CV,RB agent;
+    class DB,REDIS data;
+    class GEM aux;
+    class LOGS,SECR aux;

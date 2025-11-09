@@ -10,6 +10,7 @@ yarn-debug.log
 dist/
 build/
 *.tsbuildinfo
+*.bat
 
 # Environment variables
 .env

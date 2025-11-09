@@ -27,7 +27,7 @@ AICIN expects JWT Bearer tokens in the `Authorization` header. Your learningai36
 ### **JWT Configuration:**
 
 - **Algorithm:** HS256
-- **Secret:** `YOUR_JWT_SECRET_HERE` (must match AICIN's `.env` JWT_SECRET)
+- **Secret:** `tgJoQnBPwHxccxWwYdx15g==` (must match AICIN's `.env` JWT_SECRET)
 - **Header:** `Authorization: Bearer <token>`
 
 ---
@@ -48,7 +48,7 @@ npm install jsonwebtoken
 const jwt = require('jsonwebtoken');
 
 // MUST match AICIN's secret from .env
-const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
 
 // In your login/session handler:
 function generateAICINToken(user) {
@@ -121,7 +121,7 @@ async function submitQuiz(answers) {
 
 ```javascript
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
 
 // Test token for user ID 123
 const testToken = jwt.sign({ userId: 123 }, JWT_SECRET, { algorithm: 'HS256' });
@@ -163,7 +163,7 @@ curl -X POST https://orchestrator-239116109469.us-west1.run.app/api/v1/quiz/scor
 ```javascript
 // Verify token hasn't expired
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'YOUR_JWT_SECRET_HERE';
+const JWT_SECRET = 'tgJoQnBPwHxccxWwYdx15g==';
 
 try {
   const decoded = jwt.verify(yourToken, JWT_SECRET);
@@ -188,10 +188,10 @@ try {
 
 ```javascript
 // In learningai365.com backend:
-const JWT_SECRET = process.env.AICIN_JWT_SECRET || 'YOUR_JWT_SECRET_HERE';
+const JWT_SECRET = process.env.AICIN_JWT_SECRET || 'tgJoQnBPwHxccxWwYdx15g==';
 
 // In .env file:
-AICIN_JWT_SECRET=YOUR_JWT_SECRET_HERE
+AICIN_JWT_SECRET=tgJoQnBPwHxccxWwYdx15g==
 ```
 
 ### **Token Expiration**
@@ -240,7 +240,7 @@ const token = jwt.sign({ userId: parseInt(user.id) }, JWT_SECRET, { algorithm: '
 
 ```bash
 # Add to .env file:
-AICIN_JWT_SECRET=YOUR_JWT_SECRET_HERE
+AICIN_JWT_SECRET=tgJoQnBPwHxccxWwYdx15g==
 AICIN_API_URL=https://orchestrator-239116109469.us-west1.run.app
 ```
 
@@ -258,7 +258,7 @@ NEXT_PUBLIC_AICIN_API_URL=https://orchestrator-239116109469.us-west1.run.app
 **Before production cutover:**
 
 - [ ] JWT generation added to learningai365.com backend
-- [ ] JWT secret matches AICIN's secret (`YOUR_JWT_SECRET_HERE`)
+- [ ] JWT secret matches AICIN's secret (`tgJoQnBPwHxccxWwYdx15g==`)
 - [ ] Frontend updated to include `Authorization: Bearer <token>` header
 - [ ] Test token generation working
 - [ ] Test AICIN API call with real token succeeds

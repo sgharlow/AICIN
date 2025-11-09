@@ -7,7 +7,12 @@ const jwt = require('jsonwebtoken');
 const https = require('https');
 
 const ORCHESTRATOR_URL = 'https://orchestrator-239116109469.us-west1.run.app';
-const JWT_SECRET = process.env.JWT_SECRET || 'tgJoQnBPwHxccxWwYdx15g==';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('❌ ERROR: JWT_SECRET environment variable required');
+  console.log('Set it with: export JWT_SECRET="your-secret"');
+  process.exit(1);
+}
 
 const scenarios = [
   {
