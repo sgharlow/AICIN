@@ -96,7 +96,7 @@ Watch how we transformed a monolithic AWS Lambda into a distributed multi-agent 
 - **Project Title:** AICIN - AI Course Intelligence Network
 - **Tagline:** Multi-agent AI recommendation system on Google Cloud Run
 - **Category:** AI Agents
-- **Video URL:** [Your YouTube link]
+- **Video URL:** https://www.youtube.com/watch?v=qwUi6_6HVCY
 - **GitHub URL:** https://github.com/sgharlow/AICIN
 - **Live Demo URL:** https://orchestrator-239116109469.us-west1.run.app
 - **Description:** Copy from docs/HACKATHON_SUBMISSION.md (982 words)
